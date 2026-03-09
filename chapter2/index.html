@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <base href="https://cdn.jsdelivr.net/gh/technonyte00/deltarune@main/chapter2/">
+    <base href="https://cdn.jsdelivr.net/gh/eliasyio123/deltarune@main/chapter2/">
     <script>
       // better debugging for me
       const ogalert = window.alert;
@@ -57,6 +57,15 @@
         }
       }
 
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: fixed;
+      }
+
       html {
         background: #FFFFFF;
       }
@@ -66,9 +75,6 @@
         margin: 0;
         padding: 0;
         min-height: 100vh;
-        min-height: -webkit-fill-available;
-        min-height: fill-available;
-        min-height: 100vh; /* Otherwise contents can be covered by an address bar in Safari on iOS 15 */
         min-width: 100vw;
         background: radial-gradient(
           56.63% 56.63% at 50% 43.37%,
@@ -78,7 +84,7 @@
 		background-color: black;
         display: flex;
         flex-direction: column;
-        overflow-x: hidden;
+        overflow: hidden;
 		place-items: center;
       }
 
@@ -96,27 +102,37 @@
 		font-family: "Lucida Console", Monaco, monospace;
       }
 
-      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
       canvas.emscripten {
         display: none;
         background-color: black;
-        position: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
         transition: opacity 5s ease-in;
         -webkit-transition: opacity 5s ease-in;
         opacity: 0;
         filter: blur(0) grayscale(0);
-        image-rendering: optimizeSpeed;             /* Older versions of FF          */
-        image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
-        image-rendering: -webkit-optimize-contrast; /* Safari                        */
-        image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
-        image-rendering: pixelated;                 /* Awesome future-browsers       */
-        -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -o-crisp-edges;
+        image-rendering: pixelated;
+        -ms-interpolation-mode: nearest-neighbor;
+        z-index: 10;
       }
 
-      canvas.active {
+      canvas.emscripten.active {
         animation-name: fadeIn;
         animation-duration: 2s;
         opacity: 1;
+        display: block;
+      }
+
+      canvas.emscripten.active ~ .loading {
+        display: none;
       }
 
       canvas.paused {
@@ -182,13 +198,12 @@
         padding: 5px;
       }
 
-      /* Determines the style of the background of the progress bar */
       progress[value]::-webkit-progress-bar {
         background-color: #8492a6;
         height: 10px;
         border-radius: 15px;
       }
-      /* Determines the style of the completed part of the progress bar */
+
       progress[value]::-webkit-progress-value {
         background-image: -webkit-linear-gradient(left, #719900, #bdff00);
         height: 10px;
@@ -207,6 +222,7 @@
         align-items: center;
         pointer-events: none;
       }
+      
       div.loading > * {
         padding: 10px;
         margin: 10px;
@@ -216,6 +232,7 @@
         text-align: center;
         margin-top: auto;
       }
+      
       .output-button {
         border: none;
         width: 200px;
@@ -278,6 +295,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index: 9999;
       }
 
       #pauseMenuContainer[hidden] {
@@ -292,6 +310,7 @@
         clip-path: polygon(10.5px 0, 100% 0, 100% 100%, 0 100%, 0 10.5px);
         width: 70vw;
         max-width: 400px;
+        z-index: 1000;
       }
 
       #pauseMenu {
@@ -304,6 +323,7 @@
         animation-name: fadeIn;
         animation-duration: 0.5s;
         opacity: 1;
+        z-index: 1001;
       }
 
       #pauseMenu button {
